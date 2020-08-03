@@ -27,10 +27,12 @@ for i in range(n):
         d19[i] = "0" + str(d19[i])
 
     fname19.append(str(y19[i]) + str(m19[i]) + str(d19[i]) + "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D")     
-
+#analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D wrong coordinate, relocate to Indonesia (check download size ~18 MB)
+#time lat lon format with %5B %5D
 
 #url = urlyear + urljdate + urlfname + -JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D
 for i in range(n):
     list1 = [url1, str(y19[i]), str(j19[i]), fname19[i]]
     str1 = "/".join(list1)
-    webbrowser.open(str1)
+    print(str1)
+    #webbrowser.open(str1)
