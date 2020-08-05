@@ -1,12 +1,14 @@
 import datetime
 import webbrowser
+from tqdm import tqdm
+import requests
 
 url = "https://podaac-opendap.jpl.nasa.gov/opendap/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2019/006/20190106090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D"
 url1 = "https://podaac-opendap.jpl.nasa.gov/opendap/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1"
 url2 = "2019/006/20190106090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D"
 
 x = datetime.date(2019, 1, 1)
-n = 6
+n = 2
 y19 = []
 m19 = []
 d19 = []
@@ -26,13 +28,22 @@ for i in range(n):
     if d19[i]<10:
         d19[i] = "0" + str(d19[i])
 
-    fname19.append(str(y19[i]) + str(m19[i]) + str(d19[i]) + "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D")     
-#analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D wrong coordinate, relocate to Indonesia (check download size ~18 MB)
-#time lat lon format with %5B %5D
-
-#url = urlyear + urljdate + urlfname + -JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D
+    fname19.append(str(y19[i]) + str(m19[i]) + str(d19[i]) + 
+    "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D")  
+    #Batas koordinat salah
+    
+urls = []
 for i in range(n):
     list1 = [url1, str(y19[i]), str(j19[i]), fname19[i]]
     str1 = "/".join(list1)
-    print(str1)
-    #webbrowser.open(str1)
+    urls.append(str1)
+
+url = urls
+
+for i in range(len(url)):
+    r = requests.get(url[i], stream = True)
+    total_size = int(100000)
+    with open(str(y19[i]) + str(m19[i]) + str(d19[i]) + "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4", 'wb') as f:
+        for data in tqdm(iterable = r.iter_content(chunk_size= 1024), total = total_size/1024, unit = 'KB'):
+            f.write(data)
+    print(str(y19[i]) + str(m19[i]) + str(d19[i] +' Complete!'))
