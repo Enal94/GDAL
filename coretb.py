@@ -29,8 +29,7 @@ for i in range(n):
         d19[i] = "0" + str(d19[i])
 
     fname19.append(str(y19[i]) + str(m19[i]) + str(d19[i]) + 
-    "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B7904:1:9805%5D")  
-    #Batas koordinat salah
+    "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4?analysed_sst%5B0:1:0%5D%5B7904:1:9805%5D%5B27173:1:32068%5D")
     
 urls = []
 for i in range(n):
@@ -42,8 +41,9 @@ url = urls
 
 for i in range(len(url)):
     r = requests.get(url[i], stream = True)
-    total_size = int(100000)
-    with open(str(y19[i]) + str(m19[i]) + str(d19[i]) + "090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.nc4", 'wb') as f:
-        for data in tqdm(iterable = r.iter_content(chunk_size= 1024), total = total_size/1024, unit = 'KB'):
+    total_size = int(requests.head(url[i]).headers['content-length'])
+    #write-bin
+    with open(str(y19[i]) + str(m19[i]) + str(d19[i]) + "-JPL-L4_GHRSST-Indonesia.nc4", 'wb') as f:
+        for data in tqdm(iterable = r.iter_content(chunk_size= 1024), total = int(total_size/1024), unit = 'KB'):
             f.write(data)
     print(str(y19[i]) + str(m19[i]) + str(d19[i] +' Complete!'))
