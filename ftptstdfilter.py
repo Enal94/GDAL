@@ -9,9 +9,9 @@ import time
 import os
 from os import path
 
-Ftp_Server_host = '103.16.223.166'
-Ftp_username ='splzppi'
-Ftp_password = 'splzppi2012'
+Ftp_Server_host = ''
+Ftp_username =''
+Ftp_password = ''
 ftp = FTP(Ftp_Server_host)
 ftp.login(user=Ftp_username, passwd=Ftp_password)
 print("connected to remote server :" + Ftp_Server_host)
